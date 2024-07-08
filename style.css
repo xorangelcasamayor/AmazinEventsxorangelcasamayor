@@ -1,0 +1,27 @@
+.logo{
+    width: 20vh;
+}
+
+.carousel img{ height: 30vh;
+    object-fit: cover;
+  
+}
+
+.card{ width: 260px;}
+
+.h2{text-align: center;}
+
+ .ft{width: 5vh;}
+
+
+
+ th,td{
+    height: 40px;
+ }
+
+ .card-img-top3{width: 50vh;}
+
+ header, footer{ min-height: 5vh;}
+
+ ul{list-style:none ;}
+
