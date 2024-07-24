@@ -7,7 +7,11 @@
   
 }
 
-.card{ width: 260px;}
+
+
+.card{ 
+    width: 400px;
+}
 
 .h2{text-align: center;}
 
@@ -19,7 +23,9 @@
     height: 40px;
  }
 
- .card-img-top3{width: 50vh;}
+ .imagen42{
+    min-height: 298px;
+ }
 
  header, footer{ min-height: 5vh;}
 
