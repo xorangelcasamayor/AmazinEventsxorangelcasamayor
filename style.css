@@ -8,12 +8,14 @@
 }
 
 
-
 .card{ 
+    border: 1px solid #ccc;
+    border-radius: 8px;
     width: 400px;
 }
 
-.h2{text-align: center;}
+.h2{ 
+    text-align: center;}
 
  .ft{width: 5vh;}
 
@@ -24,6 +26,7 @@
  }
 
  .imagen42{
+    
     min-height: 298px;
  }
 
@@ -31,3 +34,34 @@
 
  ul{list-style:none ;}
 
+ .img-fluid {
+    max-width: 500px;
+    height: auto;
+}
+
+.justify-content-around{
+    padding: 20px;
+}
+
+.container-fluid{
+ margin-top: 20px;
+justify-content: space-between;
+display: flex;
+}
+
+
+label{
+    font-size: 20px;
+}
+
+.details {
+    width: 500px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;}
+
+    .details img {
+        max-width: 100%;
+        border-radius: 8px;
+    }

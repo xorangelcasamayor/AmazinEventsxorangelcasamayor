@@ -195,26 +195,73 @@ const data = {
     ],
  }; 
 
-console.log(data);
-
-for (let i = 0; i < data.events.length; i++) {
-   let card = document.createElement("div")
-   card.className= "card"
-   card.innerHTML = `
-
-      <img class= "imagen42" src="${data.events[i].image}"...">
-      <div class="card-body d-flex flex-wrap justify-content-center">
-        <h5 class="card-title ">${data.events[i].name}</h5>
-        <p class="card-text">${data.events[i].description}</p>
-       
-      </div>
-      <div class="d-flex justify-content-around"> 
-        <a href="#" class="btn">PRICE:${data.events[i].price} </a>
-        <a href="./details.html" class="btn btn-primary">DETAILS</a>
-        </div>
-   
-
-   `
-    document.getElementById("contenedor").appendChild(card)
+ function crearNuevaCard(event) {
+  let card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `
+    <img class="imagen42" src="${event.image}" alt="${event.name}">
+    <div class="card-body d-flex flex-wrap justify-content-center">
+        <h5 class="card-title">${event.name}</h5>
+        <p class="card-text">${event.description}</p>
+    </div>
+    <div class="d-flex justify-content-around">
+        <a href="#" class="btn">PRICE: ${event.price}</a>
+        <a href="details.html?event=${event._id}" class="btn btn-primary">DETAILS</a>
+    </div>
+  `;
+  return card;
 }
 
+function renderEvents(events) {
+  let container = document.getElementById("contenedor");
+  container.innerHTML = '';
+
+  if (events.length === 0) {
+    container.innerHTML = '<p>No se encontraron resultados.</p>';
+  } else {
+    events.forEach(event => container.appendChild(crearNuevaCard(event)));
+  }
+}
+
+function filtrarEvents() {
+  let checkboxes = document.querySelectorAll('input[type=checkbox]');
+  let categoria = Array.from(checkboxes)
+    .filter(cb => cb.checked)
+    .map(cb => cb.id);
+
+  let searchInput = document.getElementById('searchInput').value.toLowerCase().trim();
+
+  let filtrarEvents = data.events.filter(event => {
+    let matchesCategory = categoria.length === 0 || categoria.includes(event.category.replace(' ', ''));
+    let matchesSearch = event.name.toLowerCase().includes(searchInput) || event.description.toLowerCase().includes(searchInput);
+    return matchesCategory && matchesSearch;
+  });
+
+  renderEvents(filtrarEvents);
+}
+
+function crearCheckboxes() {
+  let categorias = new Set(data.events.map(event => event.category));
+  let container = document.getElementById('checkbox-container');
+  container.innerHTML = ''; 
+
+  categorias.forEach(categoria => {
+    let id = categoria.replace(' ', '');
+    container.innerHTML += `
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="${id}">
+        <label class="form-check-label" for="${id}">${categoria}</label>
+      </div>
+    `;
+  });
+
+  
+  document.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
+    checkbox.addEventListener('change', filtrarEvents);
+  });
+
+  document.getElementById('searchInput').addEventListener('input', filtrarEvents);
+}
+
+crearCheckboxes();
+renderEvents(data.events);

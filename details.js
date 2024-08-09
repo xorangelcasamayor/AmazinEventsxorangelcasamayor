@@ -195,79 +195,28 @@ const data = {
     ],
  }; 
 
- function crearNuevaCard(event) {
-  let card = document.createElement("div");
-  card.className = "card";
-  card.innerHTML = `
-    <img class="imagen42" src="${event.image}" alt="${event.name}">
-    <div class="card-body d-flex flex-wrap justify-content-center">
-        <h5 class="card-title">${event.name}</h5>
-        <p class="card-text">${event.description}</p>
-    </div>
-    <div class="d-flex justify-content-around">
-        <a href="#" class="btn">PRICE: ${event.price}</a>
-        <a href="details.html?event=${event._id}" class="btn btn-primary">DETAILS</a>
-    </div>
-  `;
-  return card;
-}
+ 
+ document.addEventListener('DOMContentLoaded', () => {
+    let urldetalle = new URLSearchParams(window.location.search);
+    let idEvento = urldetalle.get('event');
 
-function renderEvents(events) {
-  let container = document.getElementById("contenedor");
-  container.innerHTML = '';
+    const event = data.events.find(e => e._id ===  idEvento);
 
-  if (events.length === 0) {
-    container.innerHTML = '<p>No se encontraron resultados.</p>';
-  } else {
-    events.forEach(event => container.appendChild(crearNuevaCard(event)));
-  }
-}
-
-function aplicarFiltros() {
-  let currentDateObj = new Date(data.currentDate);
-  let checkboxes = document.querySelectorAll('input[type=checkbox]');
-  let categoriasSeleccionadas = Array.from(checkboxes)
-    .filter(cb => cb.checked)
-    .map(cb => cb.id);
-
-  let searchInput = document.querySelector('#searchInput').value.toLowerCase().trim();
-  let eventosFiltrados = data.events.filter(event => {
-    let eventDateObj = new Date(event.date);
-    let isPastEvent = eventDateObj < currentDateObj;
-    let matchesCategory = categoriasSeleccionadas.length === 0 || categoriasSeleccionadas.includes(event.category.replace(/\s+/g, ''));
-    let matchesSearch = event.name.toLowerCase().includes(searchInput) || event.description.toLowerCase().includes(searchInput);
-    return isPastEvent && matchesCategory && matchesSearch;
-  });
-
-  renderEvents(eventosFiltrados);
-}
-
-function seleccionEventos() {
-  document.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
-    checkbox.addEventListener('change', aplicarFiltros);
-  });
-
-  document.querySelector('#searchInput').addEventListener('input', aplicarFiltros);
-}
-
-function crearCheckboxes() {
-  let categorias = new Set(data.events.map(event => event.category));
-  let container = document.getElementById('checkbox-container');
-  container.innerHTML = '';
-
-  categorias.forEach(categoria => {
-   let id = categoria.replace(/\s+/g, '');
-    container.innerHTML += `
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="${id}">
-        <label class="form-check-label" for="${id}">${categoria}</label>
-      </div>
-    `;
-  });
-
-  seleccionEventos(); 
-}
-
-
-crearCheckboxes();
-aplicarFiltros(); 
+    if (event) {
+        const detailsDiv = document.getElementById('details');
+        detailsDiv.innerHTML = `
+            <img src="${event.image}" alt="${event.name}">
+            <h3 class="fs-3">${event.name}</h3>
+            <p><strong>Date:</strong> ${event.date}</p>
+            <p><strong>Description:</strong> ${event.description}</p>
+            <p><strong>Category:</strong> ${event.category}</p>
+            <p><strong>Place:</strong> ${event.place}</p>
+            <p><strong>Capacity:</strong> ${event.capacity}</p>
+            <p><strong>Assistance:</strong> ${event.assistance}</p>
+            <p><strong>Price:</strong> $${event.price}</p>
+        `;
+    } else {
+        const detailsDiv = document.getElementById('details');
+        detailsDiv.innerHTML = '<p>selecciona la tarjeta que quieras detallar</p>';
+    }
+});
